@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="stylesheet" href="/css/styles.css">
+    <link rel="stylesheet" href="/css/main.css">
+
+    <title>Hater - Home</title>
+
+</head>
+
+<body>
+    <header>
+        <div id="logo-container">
+            <h1>Hater</h1>
+        </div>
+        <nav>
+            <ul>
+                <li><a href="/">Home</a></li>
+                <li class="divider"><b>|</b></li>
+                {{#logged_in}}
+                    <li><a href="/profile">Profile</a></li>
+                {{/logged_in}}
+                {{^logged_in}}
+                    <li><a href="/login">Login</a></li>
+                {{/logged_in}}
+            </ul>
+        </nav>
+    </header>
+    <section class="container">
+        <div class="posts-container">
+            <ul id="posts">
+                {{#posts}}
+                    {{> post_item}}
+                {{/posts}}
+            </ul>
+            <div id="pagination_container">
+                {{{ pagination_markup }}}
+            </div>
+        </div>
+        <div class="sidebar">
+            <ul id="tags">
+
+            </ul>
+        </div>
+    </section>
+    <script type="text/javascript" src="/js/main.js"></script>
+</body>
+
+</html>

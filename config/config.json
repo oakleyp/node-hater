@@ -1,0 +1,23 @@
+{
+  "development": {
+    "username": "oakley",
+    "password": null,
+    "database": "hater",
+    "host": "127.0.0.1",
+    "dialect": "postgres"
+  },
+  "test": {
+    "username": "oakley",
+    "password": null,
+    "database": "hater",
+    "host": "127.0.0.1",
+    "dialect": "postgres"
+  },
+  "production": {
+    "username": "oakley",
+    "password": null,
+    "database": "hater",
+    "host": "127.0.0.1",
+    "dialect": "postgres"
+  }
+}

@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link href="https://fonts.googleapis.com/css?family=Arimo|Lobster" rel="stylesheet">
+    <link rel="stylesheet" href="/css/styles.css">
+    <link rel="stylesheet" href="/css/register.css">
+
+    <title>Hater - Sign Up</title>
+
+</head>
+
+<body>
+    <header>
+        <div id="logo-container">
+            <h1>Hater</h1>
+        </div>
+        <nav>
+            <ul>
+                <li><a href="/">Home</a></li>
+                <li class="divider"><b>|</b></li>
+                {{#logged_in}}
+                    <li><a href="/profile">Profile</a></li>
+                {{/logged_in}}
+                {{^logged_in}}
+                    <li><a href="/login">Login</a></li>
+                {{/logged_in}}
+            </ul>
+        </nav>
+    </header>
+    
+    <section class="container">
+        <div id="container-heading">
+            <h1>Sign Up</h1>
+            <h2>Just fill in some info below and start hating on fools right away.</h2>
+        </div>
+        <fieldset>
+            <form id="register-form">
+                <input id="firstname" name="firstname" type="text" placeholder="First Name" required>
+                <input id="lastname" name="lastname" type="text" placeholder="Last Name" required>
+                <input id="username" name="username" type="text" placeholder="Username" required>
+                <input id="email" name="email" type="email" placeholder="Email Address" required>
+                <input id="password" name="password" type="password" placeholder="Password" required>
+                <input id="cpassword" name="cpassword" type="password" placeholder="Confirm Password" required>
+                <input id="submit" name="submit" type="submit" value="Submit">
+            </form>
+        </fieldset>
+        {{{ error }}}
+    </section>
+    
+    <script src="/js/main.js" type="text/javascript"></script>
+    <script src="/js/register.js" type="text/javascript"></script>
+</body>
+
+</html>
