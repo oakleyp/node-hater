@@ -5,7 +5,37 @@
 .posts-container {
     width: 80%;
     margin-right: 5%;
-    padding: 2% 1%;
+    padding: 0 1%;
+}
+
+.posts-container-head {
+    display: flex;
+    padding: 1%;
+    text-align: center;
+    background: #333;
+    margin-bottom: 1%;
+}
+
+.posts-container-head h2 {
+    font-size: 1.1em;
+    margin-right: 2%;
+    color: #FFF;
+}
+
+.posts-container-head select {
+    font-size: 0.9em;
+    border: none;
+    height: 100%;
+}
+
+#new-post {
+    margin: 3% 1%;
+}
+
+#new-post input {
+    width: 97%;
+    padding: 1%;
+    font-size: 1.1em;
 }
 
 #posts {
@@ -31,8 +61,8 @@
 
 .post_heading span {
     color: #4286f4;
-    margin-right: 30%;
-} .post_heading:last-child {
+    margin-right: 35%;
+} .post_heading .timestamp {
     margin: 0;
 }
 
@@ -46,14 +76,14 @@
 }
 
 .post_foot {
-    padding: 1%;
+    padding: 0.5% 1%;
     background: #AAA;
-    display: flex;
 }
 
 .post_foot span {
     color: #FFF;
     margin-right: 40%;
+    display: inline;
 } .post_foot:last-child {
     margin: 0;
 }
@@ -66,5 +96,20 @@
 
 .sidebar {
     width: 20%;
+}
+
+.tags-container-head {
+    margin-top: 3vh;
+    text-align: left;
+}
+
+.tags-container-head h2 {
+    font-size: 1.1em;
+    color: #111;
+    padding-bottom: 5px;
+}
+
+#tags {
+    margin-top: 3vh;
 }
 

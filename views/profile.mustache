@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link href="https://fonts.googleapis.com/css?family=Arimo|Lobster" rel="stylesheet">
+    <link rel="stylesheet" href="/css/styles.css">
+    <link rel="stylesheet" href="/css/profile.css">
+
+    <title>Hater - Profile</title>
+
+</head>
+
+<body>
+    <header>
+        <div id="logo-container">
+            <h1>Hater</h1>
+        </div>
+        <nav>
+            <ul>
+                <li><a href="/">Home</a></li>
+                <li class="divider"><b>|</b></li>
+                <li><a href="/logout">Logout</a></li>
+            </ul>
+        </nav>
+    </header>
+    
+    <section class="container">
+        <div class="left-col">
+            <h2>{{ username }}</h2>
+            <h4>{{ fullname }}</h4>
+            <p></p>
+        </div>
+        <div class="right-col">
+            <h2>Recent posts</h2>
+            <ul id="recent-posts">
+                {{#posts}}
+                    {{>post_items}}
+                {{/posts}}
+            </ul>
+            
+        </div>
+    </section>
+    
+    <script src="/js/main.js" type="text/javascript"></script>
+    <script src="/js/login.js" type="text/javascript"></script>
+</body>
+
+</html>

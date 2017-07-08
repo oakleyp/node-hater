@@ -25,10 +25,13 @@ function submit(event){
     
     //Check fields, post
     let fields = {
-        username: inputs[0],
-        password: inputs[1],
-        remember: inputs[2]
+        username: inputs[0].value,
+        password: inputs[1].value,
+        remember: inputs[2].checked
     };
+    
+    console.log('Received input: ');
+    console.dir(fields);
     
     if(validateFields(fields)) {
         post('/login/', fields);

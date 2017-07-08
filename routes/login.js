@@ -20,44 +20,24 @@ router.post('/', function (req, res) {
             username: username,
             password: password
         }
-    }).then((result) => {
-        if(result != null) {
+    }).then((user) => {
+        if(user != null) {
             //Start session and redirect to index
+            req.session.authenticated = true;
+            req.session.udata = {
+                uid: user.id,
+                username: user.username,
+                fullname: user.firstname + " " + user.lastname,
+            }
+            
+            console.log("Session created with user data: ");
+            console.dir(req.session.udata);
+            
+            res.redirect(303, '/home/top/1');
+        } else {
+            res.render('login', {error: `<span class="error">The username and password combination you provided was not correct. Please try again.</span>`});
         }
     })
-    /*fs.readFile(dataFilePath, 'utf-8', function (err, fdata) {
-        if (err) {
-            console.log(`Error reading file ${path}. `, err);
-            console.log(`Error parsing data:`, fdata);
-
-        } else {
-            let data = JSON.parse(fdata);
-            let authenticated = data['users'].find(function (user) {
-                if (user.username === username && user.password === password) {
-                    req.session.udata = {
-                        username: username,
-                        firstname: user.firstname,
-                        lastname: user.lastname,
-                    }
-                    return true;
-                } else {
-                    return false;
-                }
-            });
-
-            if (authenticated) {
-
-                req.session.authenticated = true;
-                res.redirect('/');
-            } else {
-                res.render('login', {
-                    error: `<span class="error">Error: The username and password combination you provided is not correct.</span>`
-                });
-            }
-
-        }
-    });*/
-
 
 });
 

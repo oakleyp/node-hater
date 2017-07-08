@@ -1,7 +1,7 @@
 const express = require('express');
 const session = require('express-session');
 const mustache = require('mustache');
-const models = require('../models');
+const models = require('../models/index');
 const router = express.Router();
 
 //Returns array, sorted either ascending or descending, by number of haters per post
@@ -25,7 +25,7 @@ function sortByHate(postlist, order = 'DESC') {
         return postlist[el.index];
     })
 
-    if (order == 'asc') result.reverse();
+    if (order == 'desc') result.reverse();
 
     return result;
 }
@@ -77,6 +77,8 @@ router.get('/home/:sortby/:pgnum', function (req, res) {
         offset: offset
     }).then((results) => {
         let allposts = results;
+        
+        if(allposts.length) {
 
         switch (req.params.sortby) {
             case 'bottom':
@@ -88,13 +90,17 @@ router.get('/home/:sortby/:pgnum', function (req, res) {
                 break;
         }
 
-        console.log("All posts retrieved, 20 results:");
-        console.dir(results);
-        console.dir(allposts);
-
         //Format posts into json objects for mustache rendering
         let post_data = [];
         for (var i = 0; i < allposts.length; i++) {
+            let post_id = allposts[i]['id'];
+            let post_content = allposts[i]['content'];
+            let post_haters = allposts[i]['HaterIds'].split(',');
+            
+            //Formatted date of creation
+            let date_time = new Date(allposts[i].createdAt.toString());
+            date_time = (date_time.getMonth() + '/' + date_time.getDay());
+            
             //Get user info for each post, there's only 20 maximum queries per page but this could probably be optimized a lot.
             models.User.find({
                 where: {
@@ -102,43 +108,177 @@ router.get('/home/:sortby/:pgnum', function (req, res) {
                 }
             }).then((user) => {
                 //TODO: Haters and tags markup
-                console.log("Found user by id: ", user);
+                //console.log("Found user by id: ", user);
 
                 let username = user.username,
                     fullname = user.firstname + " " + user.lastname;
+                
+                let haters_markup = '',
+                    delete_markup = '';
+                
+                //Check to see whether this post is the current user's
+                if(typeof(req.session.udata) != 'undefined' && req.session.udata != {}) {
+                    if(req.session.udata.username != username) {
+                        haters_markup = `<button id="hatebtn${post_id}" class="hate-btn">Hate this</button> - `;
+                    } else {
+                        delete_markup = `<button id="deletebtn${post_id}" class="delete-btn">Delete</button>`;
+                    }
+                }
+                
+                if(post_haters.length > 0 && post_haters.join(',').replace(',').trim() != "")
+                        haters_markup += `${post_haters.length} haters.`;
+                else haters_markup += `No haters.`;
+                
 
                 post_data.push({
+                    post_id: post_id,
                     username: username,
                     fullname: fullname,
-                    timestamp: user.createdAt,
-                    content: user.content,
-                    haters_markup: "",
-                    tags_markup: ""
-                })
+                    profile_link: `/profile/${user.id}`,
+                    timestamp: date_time,
+                    content: post_content,
+                    haters_markup: haters_markup,
+                    delete_markup: delete_markup
+                });
 
-                if (i == (allposts.length)) {
-                    //                    console.log("Rendering all posts");
-                    //                    let pagedata = {
-                    //                        logged_in: authenticated,
-                    //                        posts: post_data,
-                    //                        udata: udata
-                    //                    };
-                    //                    res.render('index', pagedata);
+                if (post_data.length == (allposts.length)) {
+                    console.log("Rendering all posts:");
+                    console.dir(post_data);
+                    let pagedata = {
+                        logged_in: authenticated,
+                        posts: post_data,
+                        udata: req.session.udata
+                    };
+                    res.render('index', pagedata);
                 }
 
+            }).catch((error) => {
+                console.log("There was some error getting users: " + error.message);
             })
         }
+            
+        } else {
+            let pagedata = {
+                logged_in: authenticated,
+                posts: null,
+                udata: udata
+            }
+            res.render('index', pagedata);
+        }
 
-        console.log("Rendering all posts");
-        let pagedata = {
-            logged_in: authenticated,
-            posts: post_data,
-            udata: udata
-        };
-        res.render('index', pagedata);
+
     })
 
 });
+
+router.post('/home', function(req, res) {
+    let post_content = req.body.post_content;
+    if(post_content.length < 255 && post_content.length > 0) {
+        if(req.session && req.session.authenticated && req.session.udata.uid) {
+            models.Post.create({
+                UserId: req.session.udata.uid,
+                content: post_content,
+            }).then((post) => {
+                if(post == null) {
+                    console.log("There was some error making that post... it came back null, tf?");
+                }
+                
+                console.log("Created post: ");
+                console.dir(post);
+                
+                //Maybe just send back json result if doing ajax posts later
+                res.redirect(303, '/home/bottom/1');
+            }).catch((err) => {
+                console.log("There was some error making that post" + err.message);
+            });
+        }
+    }
+    
+    res.redirect(303, '/home/top/1');
+    
+    
+})
+
+router.post('/hate/:id', function(req, res) {
+    let post_id = req.params['id'];
+    
+    if(req.session && req.session.udata) {
+        
+        let uid = req.session.udata.uid;
+        
+        models.Post.findOne({where: {id: post_id}}).then((post) => {
+            
+            let haterids_str = '';
+            
+            if(post.HaterIds.length > 0) {
+                let haterids = post.HaterIds.split(",");
+                let undone = false;
+                console.dir(haterids);
+                for(var i = 0; i < haterids.length; i++) {
+                    if(haterids[i].toString() == uid.toString()) {
+                        console.log("Undoing hate.");
+                        if(haterids.length == 1) haterids = [];
+                        else haterids = haterids.splice(i, 1);
+                        undone = true;
+                        break;
+                    }
+                }
+                
+                if(!undone) {
+                    console.log("Pushing new id to haterids: " + uid);
+                    haterids.push(uid.toString());
+                }
+                
+                haterids_str = haterids.join(',');
+                
+                console.log("Found a post, attempting to update haterids string ", haterids_str);
+                console.dir(haterids);
+                
+            } else haterids_str = uid.toString();
+            
+            
+            //Return the result to ajax caller
+            post.HaterIds = haterids_str;
+            res.json(post);
+            
+            models.Post.update({HaterIds: haterids_str}, {where: {id: post_id}}).then((upost) => {
+                console.log("Post hates updated with: ", upost);
+            }).catch((err) => {
+                console.log("Error updating post id: " + req.params['id'] + " -> msg: " + err.message);
+            })
+            
+            
+        }).catch((err) => {
+            console.log("Error finding post to update: " + req.params['id'] + " -> msg: " + err.message);
+            res.json({});
+        })
+    } else res.json({});
+    
+
+});
+
+router.post('/delete/:id', function(req, res) {
+    let post_id = req.params['id'];
+    
+    if(req.session && req.session.udata) {
+        let uid = req.session.udata.uid;
+        
+        models.Post.findOne({where: {id: post_id, UserId: uid}}).then(post => {
+            if(post) {
+                res.json(post);
+                models.Post.destroy({where: {id: post_id}}).then(dpost => {
+                    console.log("Post deleted: ", dpost);
+                }).catch(err => {
+                    res.json({});
+                    console.log("Error deleting post. -> ", err);
+                })
+            } else res.json({});
+        }).catch(err => {
+            console.log("Error finding post to delete -> ", err);
+            res.json({});
+        })
+    } else res.json({});
+})
 
 router.get('/logout', function (req, res) {
     if (req.session && req.session.authenticated) {

@@ -1,0 +1,41 @@
+form {
+    margin-top: 2vh;
+}
+
+input {
+    display: block;
+    width: 95%;
+    padding: 1%;
+    font-size: 1.3em;
+    margin-bottom: 2vh;
+    margin-left: 1%;
+}
+
+#remember-container {
+    display: flex;
+    margin-bottom: 2vh;
+}
+
+#remember-container input:nth-of-type(1) {
+    margin-left: 1%;
+    width: 2%;
+}
+
+#remember-container input:nth-of-type(2) {
+    padding-top: 2%;
+    line-height: 8em;
+}
+
+#remember {
+}
+#login-bottom-container {
+    display: flex;
+}
+
+#submit {
+    margin-right: 60%;
+    margin-bottom: 2vh;
+    font-size: 1.3em;
+    padding: 1%;
+    width: 20%;
+}

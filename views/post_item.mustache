@@ -1,6 +1,6 @@
-<li class="post">
+<li id="post{{ post_id }}" class="post">
     <div class="post_heading">
-        <span class="username">{{ username }}</span>
+        <span class="username"><a href="{{ profile_link }}">{{ username }}</a></span>
         <span class="fullname">{{ fullname }}</span>
         <span class="timestamp">{{ timestamp }}</span>
     </div>
@@ -9,6 +9,6 @@
     </div>
     <div class="post_foot">
         <span class="haters">{{{ haters_markup }}}</span>
-        <span class="tags">{{{ tags_markup }}}</span>
+        <span class="delete">{{{ delete_markup }}}</span>
     </div>
 </li>

@@ -8,7 +8,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
     <link rel="stylesheet" href="/css/styles.css">
-    <link rel="stylesheet" href="/css/main.css">
+    <link rel="stylesheet" href="/css/home.css">
 
     <title>Hater - Home</title>
 
@@ -24,7 +24,7 @@
                 <li><a href="/">Home</a></li>
                 <li class="divider"><b>|</b></li>
                 {{#logged_in}}
-                    <li><a href="/profile">Profile</a></li>
+                    <li><a href="/profile">{{ udata.username }}</a></li>
                 {{/logged_in}}
                 {{^logged_in}}
                     <li><a href="/login">Login</a></li>
@@ -34,6 +34,18 @@
     </header>
     <section class="container">
         <div class="posts-container">
+            <div class="posts-container-head">
+                <h2>Posts from all time</h2>
+                <select id="sortby">
+                    <option value="top" selected>Most Hated</option>
+                    <option value="bottom">Least Hated</option>
+                </select>
+            </div>
+            {{#logged_in}}
+            <div id="new-post" action="/home" method="post">
+                <input id="new-post-box" type="text" placeholder="Enter a message up to 255 characters.">
+            </div>
+            {{/logged_in}}
             <ul id="posts">
                 {{#posts}}
                     {{> post_item}}
@@ -44,12 +56,17 @@
             </div>
         </div>
         <div class="sidebar">
+            <div class="tags-container-head">
+                <h2>Trending Tags (24h)</h2>
+            </div>
             <ul id="tags">
 
             </ul>
         </div>
     </section>
+    
     <script type="text/javascript" src="/js/main.js"></script>
+    <script type="text/javascript" src="/js/home.js"></script>
 </body>
 
 </html>

@@ -3,9 +3,18 @@ module.exports = function(sequelize, DataTypes) {
   var Post = sequelize.define('Post', {
     UserId: DataTypes.INTEGER,
     content: DataTypes.STRING,
-    TagIds: DataTypes.STRING,
-    HaterIds: DataTypes.STRING,
-    CommentIds: DataTypes.STRING
+    TagIds: {
+        type: DataTypes.STRING,
+        defaultValue: ''
+    },
+    HaterIds: {
+        type: DataTypes.STRING,
+        defaultValue: ''
+    },
+    CommentIds: {
+        type: DataTypes.STRING,
+        defaultValue: ''
+    }
   }, {
     classMethods: {
       associate: function(models) {

@@ -1,14 +1,15 @@
-.container-heading {
+#container-heading {
     padding: 3vh 0;
     text-align: center;
 }
 
-.container-heading h1 {
+#container-heading h1 {
     color: #4286f4;
-    font-size: 1.3em;
+    font-size: 2em;
+    margin-bottom: 2vh;
 }
 
-.container-heading h2 {
+#container-heading h2 {
     color: #111;
     font-size: 1.2em;
 }
@@ -19,6 +20,19 @@
 }
 
 #register-form input {
+    display: block;
     padding: 1%;
+    width: 90%;
+    margin-left: 4%;
+    font-size: 1.3em;
+    margin-bottom: 2vh;
+}
+
+#submit {
+    float: left;
+    padding: 1%;
+    font-size: 1.3em;
+    margin-bottom: 2vh;
+    margin-left: 4%;
 }
 

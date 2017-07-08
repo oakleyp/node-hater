@@ -1,0 +1,12 @@
+.container {
+    display: flex;
+}
+
+.left-col {
+    width: 30%;
+    margin-right: 5%;
+}
+
+.right-col {
+    width: 65%;
+}
